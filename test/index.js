@@ -59,6 +59,7 @@ rpc.exportAPI('test', manifest, {
     var readable = new Readable({ objectMode: true, read() {} })
     setImmediate(() => {
       readable.emit('error', new Error('Oh no!'))
+      readable.push('test')
       readable.push(null)
     })
     return readable

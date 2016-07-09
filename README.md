@@ -3,15 +3,15 @@
 Features:
 
  - Supports RPC calls from the renderer or webview to the background process
- - Supports async, sync, and stream methods
- - Monitors renderer/webview lifetime to automatically release memory (eg open streams)
+ - Supports async, sync, and readable methods
 
 Possible future additions:
 
  - Permissions
  - Methods which return event-emitters
  - Methods which return objects, with their own exported APIs
- - Methods which return duplex streams
+ - Methods which return writable and duplex streams
+ - Monitors renderer/webview lifetime to automatically release memory, if needed (currently not needed)
 
 ## Example usage
 
