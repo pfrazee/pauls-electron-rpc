@@ -2,20 +2,20 @@
 
 Features:
 
- - [x] Supports RPC calls from the renderer or webview to the background process
- - Supports methods which are:
-   - [x] sync
-   - [x] async
-   - [x] readable streams
- - [x] Permissions by examining the sender of the call
+ - Supports RPC calls from the renderer or webview to the background process
+ - Supports methods which return:
+   - Sync values
+   - Async CBs
+   - Readable streams
+ - Permissions by examining the sender of the call
 
 Possible future additions:
 
- - [ ] Event emitter API
+ - Event emitter API
  - Methods which return:
-   - [ ] writable streams
-   - [ ] duplex streams
-   - [ ] objects, with their own exported APIs
+   - Writable streams
+   - Duplex streams
+   - Objects, with their own exported APIs
 
 Todos:
 
