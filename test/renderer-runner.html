@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>pauls-electron-rpc Test Suite</title>
+    <style>
+      webview, #tests {
+        border: 1px solid gray;
+        height: 200px;
+        overflow-y: scroll;
+        margin-bottom: 0 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Webview:</h1>
+    <webview src="./webview-runner.html" nodeintegration></webview>
+    <h1>Renderer:</h1>
+  </body>
+  <script>require('./runner.js')</script>
+</html>

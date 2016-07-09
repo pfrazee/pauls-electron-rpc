@@ -6,7 +6,7 @@ const manifest = require('./manifest')
 
 function createWindow () {
   var mainWindow = new BrowserWindow({width: 800, height: 600})
-  mainWindow.loadURL(`file://${__dirname}/runner.html`)
+  mainWindow.loadURL(`file://${__dirname}/renderer-runner.html`)
 }
 app.on('ready', createWindow)
 app.on('window-all-closed', function () {
