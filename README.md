@@ -64,4 +64,7 @@ api.readFileSync('/etc/hosts') // => '...'
 
 ### rpc.exportAPI(channelName, manifest, methods)
 
+Methods will be called with a `this` set to the `event` object from [electron ipc](http://electron.atom.io/docs/api/ipc-main/#event-object).
+Don't touch `returnValue`.
+
 ### rpc.importAPI(channelName, manifest)
