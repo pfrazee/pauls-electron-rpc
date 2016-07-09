@@ -1,3 +1,4 @@
+const { Readable, Writable } = require('stream')
 const { app, BrowserWindow } = require('electron')
 const rpc = require('../')
 const manifest = require('./manifest')
@@ -22,5 +23,48 @@ rpc.exportAPI('test', manifest, {
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
-  error: cb => cb(new Error('oh no!'))
+  error: cb => cb(new Error('oh no!')),
+
+  // readable methods
+  goodReadable: n => {
+    var readable = new Readable({ read() {} })
+    readable.push(''+n)
+    readable.push(''+(n+1))
+    readable.push(''+(n+2))
+    readable.push(''+(n+3))
+    readable.push(null)
+    return readable
+  },
+  goodObjectmodeReadable: n => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    readable.push(n)
+    readable.push(n+1)
+    readable.push(n+2)
+    readable.push(n+3)
+    readable.push(null)
+    return readable
+  },
+  goodAsyncReadable: n => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    setImmediate(() => {
+      readable.push(n)
+      readable.push(n+1)
+      readable.push(n+2)
+      readable.push(n+3)
+      readable.push(null)
+    })
+    return readable
+  },
+  failingReadable: n => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    setImmediate(() => {
+      readable.emit('error', new Error('Oh no!'))
+      readable.push(null)
+    })
+    return readable
+  },
+  noReadable: n => undefined,
+  exceptionReadable: n => {
+    throw new Error('Oh no!')
+  }
 })

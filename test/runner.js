@@ -25,6 +25,7 @@ tape('sync method', t => {
 tape('sync error', t => {
   try {
     api.errorSync()
+    throw 'should not reach this point'
   } catch (e) {
     t.ok(e, 'Exception thrown: '+e.toString())
   }
@@ -52,4 +53,59 @@ tape('async error', t => {
     t.ok(err, 'Error returned: '+err.toString())
     t.end()
   })
+})
+
+tape('readable method 1', t => {
+  var counter = 5
+  var r = api.goodReadable(counter)
+  r.on('data', n => t.equal(+n, counter++))
+  r.on('error', err => { throw err })
+  r.on('end', () => {
+    t.end()
+  })
+})
+
+tape('readable method 2 (object mode)', t => {
+  var counter = 5
+  var r = api.goodObjectmodeReadable(counter)
+  r.on('data', n => t.equal(n, counter++))
+  r.on('error', err => { throw err })
+  r.on('end', () => {
+    t.end()
+  })
+})
+
+tape('readable method 3 (async)', t => {
+  var counter = 5
+  var r = api.goodAsyncReadable(counter)
+  r.on('data', n => t.equal(n, counter++))
+  r.on('error', err => { throw err })
+  r.on('end', () => {
+    t.end()
+  })
+})
+
+tape('readable error', t => {
+  var r = api.failingReadable()
+  r.on('data', n => { throw 'This shouldnt happen' })
+  r.on('error', err => { t.ok(err, 'Error emitted: '+err.toString()) })
+  r.on('end', () => {
+    t.end()
+  })
+})
+
+tape('readable not returned', t => {
+  var r = api.noReadable()
+  t.equal(typeof r, 'undefined')
+  t.end()
+})
+
+tape('readable exception', t => {
+  try {
+    api.exceptionReadable()
+    throw 'should not reach this point'
+  } catch (e) {
+    t.ok(e, 'Exception thrown: '+e.toString())
+  }
+  t.end()
 })

@@ -5,5 +5,13 @@ module.exports = {
 
   // async methods
   addOne: 'async',
-  error: 'async'
+  error: 'async',
+
+  // readable methods
+  goodReadable: 'readable',
+  goodObjectmodeReadable: 'readable',
+  goodAsyncReadable: 'readable',
+  failingReadable: 'readable',
+  noReadable: 'readable',
+  exceptionReadable: 'readable'
 }
