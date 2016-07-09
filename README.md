@@ -2,16 +2,25 @@
 
 Features:
 
- - Supports RPC calls from the renderer or webview to the background process
- - Supports async, sync, and readable methods
+ - [x] Supports RPC calls from the renderer or webview to the background process
+ - Supports methods which are:
+   - [x] sync
+   - [x] async
+   - [x] readable streams
+ - [x] Permissions by examining the sender of the call
 
 Possible future additions:
 
- - Permissions
- - Methods which return event-emitters
- - Methods which return objects, with their own exported APIs
- - Methods which return writable and duplex streams
- - Monitors renderer/webview lifetime to automatically release memory, if needed (currently not needed)
+ - [ ] Event emitter API
+ - Methods which return:
+   - [ ] writable streams
+   - [ ] duplex streams
+   - [ ] objects, with their own exported APIs
+
+Todos:
+
+ - [ ] Make sure buffers are sent in a useful form. (I'm not sure what the buffer behaviors should be inside webpages, yet.)
+ - [ ] Monitor renderer/webview lifetime to automatically release memory, if needed. (Currently not needed, but it will be once event-emitter APIs are supported.)
 
 ## Example usage
 
@@ -22,8 +31,7 @@ module.exports = {
   // simple method-types
   readFile: 'async',
   readFileSync: 'sync',
-  createReadStream: 'readable',
-  createWriteStream: 'writable',
+  createReadStream: 'readable'
 }
 ```
 
@@ -39,8 +47,7 @@ var api = rpc.exportAPI('example-api', manifest, {
   // the exported API behaves like normal calls:
   readFile: fs.readFile,
   readFileSync: fs.readFileSync,
-  createReadStream: fs.createReadStream,
-  createWriteStream: fs.createWriteStream
+  createReadStream: fs.createReadStream
 })
 
 // log any errors
