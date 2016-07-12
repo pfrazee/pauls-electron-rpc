@@ -8,6 +8,7 @@ Features:
    - Async CBs
    - Readable streams
  - Permissions by examining the sender of the call
+ - Monitors renderer/webview lifetime to automatically release streams.
 
 Possible future additions:
 
@@ -18,7 +19,6 @@ Possible future additions:
 Todos:
 
  - [ ] Make sure buffers are sent in a useful form. (I'm not sure what the buffer behaviors should be inside webpages, yet.)
- - [ ] Monitor renderer/webview lifetime to automatically release memory, if needed. (Currently not needed, but it will be once event-emitter APIs are supported.)
 
 ## Example usage
 
@@ -77,4 +77,4 @@ Don't touch `returnValue`.
 ## Readable Streams
 
 Readable streams in the clientside are given a `.close()` method.
-If the serverside stream implements `.close`, it will be called.
+All serverside streams MUST implement `.close()`.

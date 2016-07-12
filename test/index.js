@@ -5,8 +5,9 @@ const manifest = require('./manifest')
 
 // setup window
 
+var mainWindow
 function createWindow () {
-  var mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600})
   mainWindow.loadURL(`file://${__dirname}/renderer-runner.html`)
 }
 app.on('ready', createWindow)
@@ -55,12 +56,15 @@ rpc.exportAPI('test', manifest, {
     })
     return readable
   },
-  continuousReadable: () => {
+  continuousReadable: (label) => {
     var readable = new Readable({ objectMode: true, read() {} })
     var i = setInterval(() => readable.push('ping'), 5)
     readable.close = () => {
       clearInterval(i)
       readable.push(null)
+
+      // inform the test runner
+      mainWindow.webContents.send(label+'-close')
     }
     return readable
   },

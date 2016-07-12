@@ -11,5 +11,10 @@
   <body>
 
   </body>
-  <script>require('./runner.js')</script>
+  <script>
+  if (window.location.hash == '#main')
+    require('./runner.js')
+  if (window.location.hash == '#readable')
+    require('./webview-readable.js')
+  </script>
 </html>

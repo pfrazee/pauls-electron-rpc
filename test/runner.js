@@ -1,6 +1,7 @@
 var tape = require('tape')
 var tape_dom = require('tape-dom')
 var multicb = require('multicb')
+var { ipcRenderer } = require('electron')
 var rpc = require('../')
 var manifest = require('./manifest')
 
@@ -118,3 +119,45 @@ tape('readable exception', t => {
   }
   t.end()
 })
+
+// renderer-only tests
+if (window.isRenderer) {
+  tape('open readables close when the webview is destroyed', t => {
+    var wv = document.createElement('webview')
+    wv.id = 'readable-webview'
+    wv.setAttribute('nodeintegration', true)
+    wv.src = "./webview-runner.html#readable"
+    document.body.appendChild(wv)
+
+    wv.addEventListener('dom-ready', () => {
+      console.log('readable webview loaded')
+
+      ipcRenderer.once('destroytest-close', () => {
+        t.ok(true, 'Stream was closed when webview was destroyed')
+        t.end()
+      })
+
+      document.body.removeChild(wv)
+    })
+  })
+
+  tape('open readables close when the webview is navigated', t => {
+    var wv = document.createElement('webview')
+    wv.id = 'readable-webview2'
+    wv.setAttribute('nodeintegration', true)
+    wv.src = "./webview-runner.html#readable"
+    document.body.appendChild(wv)
+
+    wv.addEventListener('dom-ready', () => {
+      console.log('readable webview 2 loaded')
+
+      ipcRenderer.once('destroytest-close', () => {
+        document.body.removeChild(wv)
+        t.ok(true, 'Stream was closed when webview navigated')
+        t.end()
+      })
+
+      wv.loadURL('about:blank')
+    })
+  })
+}
