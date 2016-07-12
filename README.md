@@ -11,11 +11,9 @@ Features:
 
 Possible future additions:
 
- - Event emitter API
- - Methods which return:
-   - Writable streams
-   - Duplex streams
-   - Objects, with their own exported APIs
+ - Writable streams
+ - Duplex streams
+ - Return objects with their own exported APIs
 
 Todos:
 
@@ -75,3 +73,8 @@ Methods will be called with a `this` set to the `event` object from [electron ip
 Don't touch `returnValue`.
 
 ### rpc.importAPI(channelName, manifest)
+
+## Readable Streams
+
+Readable streams in the clientside are given a `.close()` method.
+If the serverside stream implements `.close`, it will be called.

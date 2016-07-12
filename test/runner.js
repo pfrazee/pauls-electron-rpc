@@ -85,9 +85,18 @@ tape('readable method 3 (async)', t => {
   })
 })
 
+tape('readable close from client', t => {
+  var r = api.continuousReadable()
+  setTimeout(() => r.close(), 50)
+  r.on('data', data => console.log(data))
+  r.on('end', () => {
+    t.ok(true, 'Close() ends the streamp')
+    t.end()
+  })
+})
+
 tape('readable error', t => {
   var r = api.failingReadable()
-  r.on('data', n => { throw 'This shouldnt happen' })
   r.on('error', err => { t.ok(err, 'Error emitted: '+err.toString()) })
   r.on('end', () => {
     t.end()

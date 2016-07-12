@@ -55,11 +55,19 @@ rpc.exportAPI('test', manifest, {
     })
     return readable
   },
+  continuousReadable: () => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    var i = setInterval(() => readable.push('ping'), 5)
+    readable.close = () => {
+      clearInterval(i)
+      readable.push(null)
+    }
+    return readable
+  },
   failingReadable: n => {
     var readable = new Readable({ objectMode: true, read() {} })
     setImmediate(() => {
       readable.emit('error', new Error('Oh no!'))
-      readable.push('test')
       readable.push(null)
     })
     return readable
