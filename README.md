@@ -77,4 +77,4 @@ Don't touch `returnValue`.
 ## Readable Streams
 
 Readable streams in the clientside are given a `.close()` method.
-All serverside streams MUST implement `.close()`.
+All serverside streams MUST implement `.close()` or `.destroy()`, either of which will be called.
