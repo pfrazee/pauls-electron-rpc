@@ -98,8 +98,8 @@ tape('readable close from client', t => {
 
 tape('readable error', t => {
   var r = api.failingReadable()
-  r.on('error', err => { t.ok(err, 'Error emitted: '+err.toString()) })
-  r.on('end', () => {
+  r.on('error', err => { 
+    t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
 })
@@ -113,6 +113,64 @@ tape('readable not returned', t => {
 tape('readable exception', t => {
   try {
     api.exceptionReadable()
+    throw 'should not reach this point'
+  } catch (e) {
+    t.ok(e, 'Exception thrown: '+e.toString())
+  }
+  t.end()
+})
+
+tape('writable method 1', t => {
+  var w = api.goodWritable(5)
+  ipcRenderer.once('writable-end', (event, data) => {
+    t.deepEqual(data, ['51','52','53','54','55'])
+    t.end()
+  })
+  w.write(1)
+  w.write(2)
+  w.write(3)
+  w.write(4)
+  w.write(5)
+  w.end()
+})
+
+tape('writable method 2 (object mode)', t => {
+  var w = api.goodObjectmodeWritable(5)
+  ipcRenderer.once('writable-end', (event, data) => {
+    t.deepEqual(data, [6,7,8,9,10])
+    t.end()
+  })
+  w.write(1)
+  w.write(2)
+  w.write(3)
+  w.write(4)
+  w.write(5)
+  w.end()
+})
+
+tape('writable error', t => {
+  var w = api.failingWritable()
+  w.on('error', err => { 
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
+  w.write(1)
+  w.write(2)
+  w.write(3)
+  w.write(4)
+  w.write(5)
+  w.end()
+})
+
+tape('writable not returned', t => {
+  var w = api.noWritable()
+  t.equal(typeof w, 'undefined')
+  t.end()
+})
+
+tape('writable exception', t => {
+  try {
+    api.exceptionWritable()
     throw 'should not reach this point'
   } catch (e) {
     t.ok(e, 'Exception thrown: '+e.toString())

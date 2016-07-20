@@ -14,5 +14,12 @@ module.exports = {
   continuousReadable: 'readable',
   failingReadable: 'readable',
   noReadable: 'readable',
-  exceptionReadable: 'readable'
+  exceptionReadable: 'readable',
+
+  // writable methods
+  goodWritable: 'writable',
+  goodObjectmodeWritable: 'writable',
+  failingWritable: 'writable',
+  noWritable: 'writable',
+  exceptionWritable: 'writable'
 }

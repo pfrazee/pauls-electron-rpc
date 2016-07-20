@@ -7,12 +7,12 @@ Features:
    - Sync values
    - Async CBs
    - Readable streams
+   - Writable streams
  - Permissions by examining the sender of the call
  - Monitors renderer/webview lifetime to automatically release streams.
 
 Possible future additions:
 
- - Writable streams
  - Duplex streams
  - Return objects with their own exported APIs
 

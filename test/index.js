@@ -79,5 +79,47 @@ rpc.exportAPI('test', manifest, {
   noReadable: n => undefined,
   exceptionReadable: n => {
     throw new Error('Oh no!')
+  },
+
+  // writable methods
+  goodWritable: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      write (chunk, enc, next) {
+        buffer.push(n + chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+    return writable
+  },
+  goodObjectmodeWritable: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(n + chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+    return writable
+  },
+  failingWritable: n => {
+    var writable = new Writable({
+      write (chunk, enc, next) {}
+    })
+    setImmediate(() => {
+      writable.emit('error', new Error('Oh no!'))
+    })
+    return writable
+  },
+  noWritable: n => undefined,
+  exceptionWritable: n => {
+    throw new Error('Oh no!')
   }
 })
