@@ -6,6 +6,7 @@ module.exports = {
   // async methods
   addOne: 'async',
   error: 'async',
+  timeout: 'async',
 
   // readable methods
   goodReadable: 'readable',

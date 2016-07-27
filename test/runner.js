@@ -12,7 +12,7 @@ tape_dom.stream(tape)
 
 // import api
 
-var api = rpc.importAPI('test', manifest)
+var api = rpc.importAPI('test', manifest, { timeout: 1e3 })
 
 // run tests
 tape('sync method', t => {
@@ -51,6 +51,13 @@ tape('async method', t => {
 
 tape('async error', t => {
   api.error(err => {
+    t.ok(err, 'Error returned: '+err.toString())
+    t.end()
+  })
+})
+
+tape('async timeout', t => {
+  api.timeout(err => {
     t.ok(err, 'Error returned: '+err.toString())
     t.end()
   })

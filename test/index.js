@@ -25,6 +25,7 @@ rpc.exportAPI('test', manifest, {
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
   error: cb => cb(new Error('oh no!')),
+  timeout: cb => setTimeout(cb, 5e3),
 
   // readable methods
   goodReadable: n => {

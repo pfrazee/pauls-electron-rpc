@@ -9,7 +9,8 @@ Features:
    - Readable streams
    - Writable streams
  - Permissions by examining the sender of the call
- - Monitors renderer/webview lifetime to automatically release streams.
+ - Monitors renderer/webview lifetime to automatically release streams
+ - Optional timeout for async methods
 
 Possible future additions:
 
@@ -59,7 +60,7 @@ var rpc = require('pauls-electron-rpc')
 var manifest = require('./example-api-manifest')
 
 // import over the 'example-api' channel
-var api = rpc.importAPI('example-api', manifest)
+var api = rpc.importAPI('example-api', manifest, { timeout: 30e3 })
 
 // now use, as usual:
 api.readFileSync('/etc/hosts') // => '...'
@@ -72,7 +73,10 @@ api.readFileSync('/etc/hosts') // => '...'
 Methods will be called with a `this` set to the `event` object from [electron ipc](http://electron.atom.io/docs/api/ipc-main/#event-object).
 Don't touch `returnValue`.
 
-### rpc.importAPI(channelName, manifest)
+### rpc.importAPI(channelName, manifest [,options])
+
+The `options` may include a `timeout`, to specify how long async methods wait before erroring.
+Set to `false` to disable timeout.
 
 ## Readable Streams
 
