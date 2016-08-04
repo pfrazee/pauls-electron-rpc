@@ -63,6 +63,39 @@ tape('async timeout', t => {
   })
 })
 
+tape('promise method', t => {
+  Promise.all([
+    api.addOnePromise(5),
+    api.addOnePromise(0),
+    api.addOnePromise(null),
+    api.addOnePromise('asdf')
+  ]).then(values => {
+    t.equal(values[0], 6, '5+1')
+    t.equal(values[1], 1, '0+1')
+    t.equal(values[2], 1, 'null+1')
+    t.equal(values[3], 'asdf1', 'asdf+1')
+    t.end()
+  }).catch(e => { throw e })
+})
+
+tape('promise error', t => {
+  api.errorPromise()
+    .then(value => { throw "This should not happen" })
+    .catch(err => {
+      t.ok(err, 'Error returned: '+err.toString())
+      t.end()
+    })
+})
+
+tape('promise timeout', t => {
+  api.timeoutPromise()
+    .then(value => { throw "This should not happen" })
+    .catch(err => {
+      t.ok(err, 'Error returned: '+err.toString())
+      t.end()
+    })
+})
+
 tape('readable method 1', t => {
   var counter = 5
   var r = api.goodReadable(counter)

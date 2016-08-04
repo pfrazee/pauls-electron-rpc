@@ -8,6 +8,11 @@ module.exports = {
   error: 'async',
   timeout: 'async',
 
+  // promise methods
+  addOnePromise: 'promise',
+  errorPromise: 'promise',
+  timeoutPromise: 'promise',
+
   // readable methods
   goodReadable: 'readable',
   goodObjectmodeReadable: 'readable',

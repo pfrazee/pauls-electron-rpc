@@ -27,6 +27,11 @@ rpc.exportAPI('test', manifest, {
   error: cb => cb(new Error('oh no!')),
   timeout: cb => setTimeout(cb, 5e3),
 
+  // promise methods
+  addOnePromise: (n, cb) => Promise.resolve(n + 1),
+  errorPromise: cb => Promise.reject(new Error('oh no!')),
+  timeoutPromise: cb => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
+
   // readable methods
   goodReadable: n => {
     var readable = new Readable({ read() {} })

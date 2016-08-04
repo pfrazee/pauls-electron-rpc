@@ -6,6 +6,7 @@ Features:
  - Supports methods which return:
    - Sync values
    - Async CBs
+   - Promises
    - Readable streams
    - Writable streams
  - Permissions by examining the sender of the call
@@ -30,6 +31,7 @@ module.exports = {
   // simple method-types
   readFile: 'async',
   readFileSync: 'sync',
+  sayHello: 'promise',
   createReadStream: 'readable'
 }
 ```
@@ -46,6 +48,7 @@ var api = rpc.exportAPI('example-api', manifest, {
   // the exported API behaves like normal calls:
   readFile: fs.readFile,
   readFileSync: fs.readFileSync,
+  sayHello: () => return Promise.resolve('hello!'),
   createReadStream: fs.createReadStream
 })
 
