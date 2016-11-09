@@ -1,6 +1,6 @@
 {
   "name": "pauls-electron-rpc",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "My RPC solution for exporting APIs from the electron background process to renderers and webviews.",
   "main": "index.js",
   "scripts": {
