@@ -25,6 +25,7 @@
     "electron-prebuilt": "^1.2.6",
     "multicb": "^1.2.1",
     "tape": "^4.6.0",
-    "tape-dom": "0.0.10"
+    "tape-dom": "0.0.10",
+    "zerr": "^1.0.4"
   }
 }

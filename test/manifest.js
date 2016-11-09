@@ -11,6 +11,7 @@ module.exports = {
   // promise methods
   addOnePromise: 'promise',
   errorPromise: 'promise',
+  customErrorPromise: 'promise',
   timeoutPromise: 'promise',
 
   // readable methods

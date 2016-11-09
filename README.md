@@ -85,3 +85,8 @@ Set to `false` to disable timeout.
 
 Readable streams in the clientside are given a `.close()` method.
 All serverside streams MUST implement `.close()` or `.destroy()`, either of which will be called.
+
+## Eval Requirement
+
+For custom errors to output nicely in devtools, I had to use eval.
+If anybody has a better idea, please file an issue or PR.

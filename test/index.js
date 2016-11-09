@@ -1,5 +1,6 @@
 const { Readable, Writable } = require('stream')
 const { app, BrowserWindow } = require('electron')
+const zerr = require('zerr')
 const rpc = require('../')
 const manifest = require('./manifest')
 
@@ -17,6 +18,8 @@ app.on('window-all-closed', function () {
 
 // export api
 
+const CustomError = zerr('CustomError')
+
 rpc.exportAPI('test', manifest, {
   // sync methods
   addOneSync: n => n + 1,
@@ -28,9 +31,10 @@ rpc.exportAPI('test', manifest, {
   timeout: cb => setTimeout(cb, 5e3),
 
   // promise methods
-  addOnePromise: (n, cb) => Promise.resolve(n + 1),
-  errorPromise: cb => Promise.reject(new Error('oh no!')),
-  timeoutPromise: cb => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
+  addOnePromise: n => Promise.resolve(n + 1),
+  errorPromise: () => Promise.reject(new Error('oh no!')),
+  customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
+  timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
 
   // readable methods
   goodReadable: n => {

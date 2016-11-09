@@ -80,16 +80,28 @@ tape('promise method', t => {
 
 tape('promise error', t => {
   api.errorPromise()
-    .then(value => { throw "This should not happen" })
     .catch(err => {
-      t.ok(err, 'Error returned: '+err.toString())
+      console.log('Plain Error', err, err.toString())
+      t.equal(err.toString(), 'Error: oh no!')
+      t.equal(err.name, 'Error')
+      t.equal(err.message, 'oh no!')
+      t.end()
+    })
+})
+
+tape('promise custom error', t => {
+  api.customErrorPromise()
+    .catch(err => {
+      console.log('Custom Error', err, err.toString())
+      t.equal(err.toString(), 'CustomError: oh no!')
+      t.equal(err.name, 'CustomError')
+      t.equal(err.message, 'oh no!')
       t.end()
     })
 })
 
 tape('promise timeout', t => {
   api.timeoutPromise()
-    .then(value => { throw "This should not happen" })
     .catch(err => {
       t.ok(err, 'Error returned: '+err.toString())
       t.end()
