@@ -71,10 +71,21 @@ api.readFileSync('/etc/hosts') // => '...'
 
 ## API
 
-### rpc.exportAPI(channelName, manifest, methods)
+### rpc.exportAPI(channelName, manifest, methods, [globalPermissionCheck])
 
 Methods will be called with a `this` set to the `event` object from [electron ipc](http://electron.atom.io/docs/api/ipc-main/#event-object).
 Don't touch `returnValue`.
+
+You can optionally specify a method for `globalPermissionCheck` with the following signature:
+
+```js
+function globalPermissionCheck (event, methodName, args) {
+  if (event.sender.getURL() != 'url-I-trust') return false
+  return true
+}
+```
+
+If `globalPermissionCheck` is specified, and does not return true, the method call will respond with a 'Denied' error.
 
 ### rpc.importAPI(channelName, manifest [,options])
 

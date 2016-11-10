@@ -24,13 +24,21 @@ tape('sync method', t => {
 })
 
 tape('sync error', t => {
+  t.plan(1)
   try {
     api.errorSync()
-    throw 'should not reach this point'
   } catch (e) {
     t.ok(e, 'Exception thrown: '+e.toString())
   }
-  t.end()
+})
+
+tape('disallowed sync method', t => {
+  t.plan(1)
+  try {
+    api.disallowedMethodSync()
+  } catch (e) {
+    t.ok(e, 'Exception thrown: '+e.toString())
+  }
 })
 
 tape('async method', t => {
@@ -58,6 +66,13 @@ tape('async error', t => {
 
 tape('async timeout', t => {
   api.timeout(err => {
+    t.ok(err, 'Error returned: '+err.toString())
+    t.end()
+  })
+})
+
+tape('disallowed async method', t => {
+  api.disallowedMethod(err => {
     t.ok(err, 'Error returned: '+err.toString())
     t.end()
   })

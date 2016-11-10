@@ -2,11 +2,13 @@ module.exports = {
   // sync methods
   addOneSync: 'sync',
   errorSync: 'sync',
+  disallowedMethodSync: 'sync',
 
   // async methods
   addOne: 'async',
   error: 'async',
   timeout: 'async',
+  disallowedMethod: 'async',
 
   // promise methods
   addOnePromise: 'promise',

@@ -20,15 +20,23 @@ app.on('window-all-closed', function () {
 
 const CustomError = zerr('CustomError')
 
+function globalPermissionCheck (event, methodName, args) {
+  if (methodName === 'disallowedMethodSync') return false
+  if (methodName === 'disallowedMethod') return false
+  return true
+}
+
 rpc.exportAPI('test', manifest, {
   // sync methods
   addOneSync: n => n + 1,
   errorSync: () => { throw new Error('oh no!') },
+  disallowedMethodSync: () => true,
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
   error: cb => cb(new Error('oh no!')),
   timeout: cb => setTimeout(cb, 5e3),
+  disallowedMethod: cb => cb(true),
 
   // promise methods
   addOnePromise: n => Promise.resolve(n + 1),
@@ -132,4 +140,4 @@ rpc.exportAPI('test', manifest, {
   exceptionWritable: n => {
     throw new Error('Oh no!')
   }
-})
+}, globalPermissionCheck)
