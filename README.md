@@ -91,6 +91,7 @@ If `globalPermissionCheck` is specified, and does not return true, the method ca
 
 The `options` may include a `timeout`, to specify how long async methods wait before erroring.
 Set to `false` to disable timeout.
+You can also set `options.noEval` to disable the eval usage in error-creation.
 
 ## Readable Streams
 
