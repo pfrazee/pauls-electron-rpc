@@ -57,6 +57,19 @@ tape('async method', t => {
   })
 })
 
+tape('async buffer method', t => {
+  api.getBuffer((err, buf) => {
+    if (err) throw err
+    t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+
+    api.sendBuffer(Buffer.from('00010203040506070809', 'hex'), (err, buf) => {
+      if (err) throw err
+      t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+      t.end()
+    })
+  })
+})
+
 tape('async error', t => {
   api.error(err => {
     t.ok(err, 'Error returned: '+err.toString())
@@ -91,6 +104,17 @@ tape('promise method', t => {
     t.equal(values[3], 'asdf1', 'asdf+1')
     t.end()
   }).catch(e => { throw e })
+})
+
+tape('promise buffer method', t => {
+  api.getBufferPromise().then(buf => {
+    t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+
+    api.sendBufferPromise(Buffer.from('00010203040506070809', 'hex')).then(buf => {
+      t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+      t.end()
+    })
+  })
 })
 
 tape('promise error', t => {

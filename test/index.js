@@ -34,12 +34,16 @@ rpc.exportAPI('test', manifest, {
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
+  getBuffer: cb => cb(null, Buffer.from('00010203040506070809', 'hex')),
+  sendBuffer: (buf, cb) => cb(null, buf),
   error: cb => cb(new Error('oh no!')),
   timeout: cb => setTimeout(cb, 5e3),
   disallowedMethod: cb => cb(true),
 
   // promise methods
   addOnePromise: n => Promise.resolve(n + 1),
+  getBufferPromise: () => Promise.resolve(Buffer.from('00010203040506070809', 'hex')),
+  sendBufferPromise: buf => Promise.resolve(buf),
   errorPromise: () => Promise.reject(new Error('oh no!')),
   customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
   timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),

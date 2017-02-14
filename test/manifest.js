@@ -6,12 +6,16 @@ module.exports = {
 
   // async methods
   addOne: 'async',
+  getBuffer: 'async',
+  sendBuffer: 'async',
   error: 'async',
   timeout: 'async',
   disallowedMethod: 'async',
 
   // promise methods
   addOnePromise: 'promise',
+  getBufferPromise: 'promise',
+  sendBufferPromise: 'promise',
   errorPromise: 'promise',
   customErrorPromise: 'promise',
   timeoutPromise: 'promise',
