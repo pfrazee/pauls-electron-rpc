@@ -4,7 +4,7 @@
   "description": "My RPC solution for exporting APIs from the electron background process to renderers and webviews.",
   "main": "index.js",
   "scripts": {
-    "test": "node -e \"require('child_process').spawn(require('electron-prebuilt'), ['./test'], { stdio: 'inherit' })\""
+    "test": "node -e \"require('child_process').spawn(require('electron'), ['./test'], { stdio: 'inherit' })\""
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/pfraze/pauls-electron-rpc#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.6",
+    "electron": "1.5.0",
     "multicb": "^1.2.1",
     "tape": "^4.6.0",
     "tape-dom": "0.0.10",
