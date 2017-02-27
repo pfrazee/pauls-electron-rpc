@@ -91,14 +91,46 @@ If `globalPermissionCheck` is specified, and does not return true, the method ca
 
 The `options` may include a `timeout`, to specify how long async methods wait before erroring.
 Set to `false` to disable timeout.
-You can also set `options.noEval` to disable the eval usage in error-creation.
+
+The `options` may also include an `errors` object which provides custom error constructors.
 
 ## Readable Streams
 
 Readable streams in the clientside are given a `.close()` method.
 All serverside streams MUST implement `.close()` or `.destroy()`, either of which will be called.
 
-## Eval Requirement
+## Custom Errors
 
-For custom errors to output nicely in devtools, I had to use eval.
-If anybody has a better idea, please file an issue or PR.
+```js
+// shared code
+// =
+
+var manifest = {
+  testThrow: 'promise'
+}
+
+class MyCustomError extends Error {
+  constructor() {
+    super()
+    this.name = 'MyCustomError'
+    this.message = 'Custom error!'
+  }
+}
+
+// server
+// =
+
+rpc.exportAPI('error-api', manifest, {
+  testThrow() {
+    return Promise.reject(new MyCustomError())
+  }
+})
+
+// client
+// =
+
+var rpcClient = rpc.importAPI('error-api', manifest, {
+  errors: {MyCustomError} // pass in custom error constructors
+})
+rpcClient.testThrow().catch(console.log) // => MyCustomError
+```

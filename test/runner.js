@@ -1,9 +1,11 @@
 var tape = require('tape')
 var tape_dom = require('tape-dom')
 var multicb = require('multicb')
+var zerr = require('zerr')
 var { ipcRenderer } = require('electron')
 var rpc = require('../')
 var manifest = require('./manifest')
+var CustomError = zerr('CustomError')
 
 // setup tape
 
@@ -12,7 +14,7 @@ tape_dom.stream(tape)
 
 // import api
 
-var api = rpc.importAPI('test', manifest, { timeout: 1e3 })
+var api = rpc.importAPI('test', manifest, { timeout: 1e3, errors: {CustomError} })
 
 // run tests
 tape('sync method', t => {
