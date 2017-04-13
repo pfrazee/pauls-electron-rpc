@@ -169,7 +169,17 @@ tape('readable method 2 (object mode)', t => {
   })
 })
 
-tape('readable method 3 (async)', t => {
+tape('readable method 3 (promise)', t => {
+  var counter = 5
+  var r = api.goodReadablePromise(counter)
+  r.on('data', n => t.equal(+n, counter++))
+  r.on('error', err => { throw err })
+  r.on('end', () => {
+    t.end()
+  })
+})
+
+tape('readable method 4 (async)', t => {
   var counter = 5
   var r = api.goodAsyncReadable(counter)
   r.on('data', n => t.equal(n, counter++))
@@ -191,6 +201,14 @@ tape('readable close from client', t => {
 
 tape('readable error', t => {
   var r = api.failingReadable()
+  r.on('error', err => { 
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
+})
+
+tape('readable error (promise)', t => {
+  var r = api.failingReadablePromise()
   r.on('error', err => { 
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()

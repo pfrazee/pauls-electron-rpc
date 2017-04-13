@@ -67,6 +67,19 @@ rpc.exportAPI('test', manifest, {
     readable.push(null)
     return readable
   },
+  goodReadablePromise: n => {
+    return new Promise(resolve => {
+      setImmediate(() => {
+        var readable = new Readable({ read() {} })
+        resolve(readable)
+        readable.push(''+n)
+        readable.push(''+(n+1))
+        readable.push(''+(n+2))
+        readable.push(''+(n+3))
+        readable.push(null)
+      })
+    })
+  },
   goodAsyncReadable: n => {
     var readable = new Readable({ objectMode: true, read() {} })
     setImmediate(() => {
@@ -97,6 +110,13 @@ rpc.exportAPI('test', manifest, {
       readable.push(null)
     })
     return readable
+  },
+  failingReadablePromise: n => {
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        reject(new Error('Oh no!'))
+      })
+    })
   },
   noReadable: n => undefined,
   exceptionReadable: n => {

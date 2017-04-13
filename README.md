@@ -99,6 +99,8 @@ The `options` may also include an `errors` object which provides custom error co
 Readable streams in the clientside are given a `.close()` method.
 All serverside streams MUST implement `.close()` or `.destroy()`, either of which will be called.
 
+Stream methods can return a promise that resolves to a stream.
+
 ## Custom Errors
 
 ```js

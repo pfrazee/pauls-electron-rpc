@@ -23,9 +23,11 @@ module.exports = {
   // readable methods
   goodReadable: 'readable',
   goodObjectmodeReadable: 'readable',
+  goodReadablePromise: 'readable',
   goodAsyncReadable: 'readable',
   continuousReadable: 'readable',
   failingReadable: 'readable',
+  failingReadablePromise: 'readable',
   noReadable: 'readable',
   exceptionReadable: 'readable',
 
