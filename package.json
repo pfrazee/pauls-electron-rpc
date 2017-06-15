@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/pfraze/pauls-electron-rpc#readme",
   "devDependencies": {
-    "electron": "1.6.4",
+    "arraybuffer-equal": "^1.0.4",
+    "electron": "1.7.1",
     "multicb": "^1.2.1",
     "tape": "^4.6.0",
     "tape-dom": "0.0.10",

@@ -34,23 +34,23 @@ rpc.exportAPI('test', manifest, {
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
-  getBuffer: cb => cb(null, Buffer.from('00010203040506070809', 'hex')),
-  sendBuffer: (buf, cb) => cb(null, buf),
+  getArrayBuffer: cb => cb(null, (new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
+  sendArrayBuffer: (buf, cb) => {cb(null, buf)},
   error: cb => cb(new Error('oh no!')),
   timeout: cb => setTimeout(cb, 5e3),
   disallowedMethod: cb => cb(true),
 
   // promise methods
   addOnePromise: n => Promise.resolve(n + 1),
-  getBufferPromise: () => Promise.resolve(Buffer.from('00010203040506070809', 'hex')),
-  sendBufferPromise: buf => Promise.resolve(buf),
+  getArrayBufferPromise: () => Promise.resolve((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
+  sendArrayBufferPromise: buf => Promise.resolve(buf),
   errorPromise: () => Promise.reject(new Error('oh no!')),
   customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
   timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
 
   // readable methods
   goodReadable: n => {
-    var readable = new Readable({ read() {} })
+    var readable = new Readable({objectMode: true, read() {}})
     readable.push(''+n)
     readable.push(''+(n+1))
     readable.push(''+(n+2))
@@ -70,7 +70,7 @@ rpc.exportAPI('test', manifest, {
   goodReadablePromise: n => {
     return new Promise(resolve => {
       setImmediate(() => {
-        var readable = new Readable({ read() {} })
+        var readable = new Readable({objectMode: true, read() {} })
         resolve(readable)
         readable.push(''+n)
         readable.push(''+(n+1))

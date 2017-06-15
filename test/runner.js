@@ -2,6 +2,7 @@ var tape = require('tape')
 var tape_dom = require('tape-dom')
 var multicb = require('multicb')
 var zerr = require('zerr')
+var isABEqual = require('arraybuffer-equal')
 var { ipcRenderer } = require('electron')
 var rpc = require('../')
 var manifest = require('./manifest')
@@ -59,14 +60,14 @@ tape('async method', t => {
   })
 })
 
-tape('async buffer method', t => {
-  api.getBuffer((err, buf) => {
+tape('async array buffer method', t => {
+  api.getArrayBuffer((err, buf) => {
     if (err) throw err
-    t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
 
-    api.sendBuffer(Buffer.from('00010203040506070809', 'hex'), (err, buf) => {
+    api.sendArrayBuffer((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer, (err, buf) => {
       if (err) throw err
-      t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
       t.end()
     })
   })
@@ -108,12 +109,12 @@ tape('promise method', t => {
   }).catch(e => { throw e })
 })
 
-tape('promise buffer method', t => {
-  api.getBufferPromise().then(buf => {
-    t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+tape('promise array buffer method', t => {
+  api.getArrayBufferPromise().then(buf => {
+    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
 
-    api.sendBufferPromise(Buffer.from('00010203040506070809', 'hex')).then(buf => {
-      t.ok(Buffer.from('00010203040506070809', 'hex').equals(buf))
+    api.sendArrayBufferPromise(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer).then(buf => {
+      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
       t.end()
     })
   })

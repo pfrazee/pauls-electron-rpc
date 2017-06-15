@@ -18,10 +18,6 @@ Possible future additions:
  - Duplex streams
  - Return objects with their own exported APIs
 
-Todos:
-
- - [ ] Make sure buffers are sent in a useful form. (I'm not sure what the buffer behaviors should be inside webpages, yet.)
-
 ## Example usage
 
 In a shared `example-api-manifest.js`:
@@ -100,6 +96,10 @@ Readable streams in the clientside are given a `.close()` method.
 All serverside streams MUST implement `.close()` or `.destroy()`, either of which will be called.
 
 Stream methods can return a promise that resolves to a stream.
+
+## Buffers and ArrayBuffers
+
+Arguments and return values are massaged so that they are Buffers on the exporter's side, and ArrayBuffers on the importer side.
 
 ## Custom Errors
 
