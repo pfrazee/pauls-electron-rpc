@@ -63,10 +63,12 @@ tape('async method', t => {
 tape('async array buffer method', t => {
   api.getArrayBuffer((err, buf) => {
     if (err) throw err
+    t.ok(buf instanceof ArrayBuffer)
     t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
 
     api.sendArrayBuffer((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer, (err, buf) => {
       if (err) throw err
+      t.ok(buf instanceof ArrayBuffer)
       t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
       t.end()
     })
@@ -112,9 +114,11 @@ tape('promise method', t => {
 tape('promise array buffer method', t => {
   api.getArrayBufferPromise().then(buf => {
     t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+    t.ok(buf instanceof ArrayBuffer)
 
     api.sendArrayBufferPromise(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer).then(buf => {
       t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+      t.ok(buf instanceof ArrayBuffer)
       t.end()
     })
   })
