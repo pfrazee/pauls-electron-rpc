@@ -206,7 +206,8 @@ tape('readable close from client', t => {
 
 tape('readable error', t => {
   var r = api.failingReadable()
-  r.on('error', err => { 
+  r.on('error', err => {
+    console.log('readable error', err)
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
@@ -215,6 +216,7 @@ tape('readable error', t => {
 tape('readable error (promise)', t => {
   var r = api.failingReadablePromise()
   r.on('error', err => { 
+    console.log('readable promise error', err)
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
@@ -231,6 +233,7 @@ tape('readable exception', t => {
     api.exceptionReadable()
     throw 'should not reach this point'
   } catch (e) {
+    console.log('readable exception', e)
     t.ok(e, 'Exception thrown: '+e.toString())
   }
   t.end()
@@ -289,6 +292,7 @@ tape('writable exception', t => {
     api.exceptionWritable()
     throw 'should not reach this point'
   } catch (e) {
+    console.log('writable exception', e)
     t.ok(e, 'Exception thrown: '+e.toString())
   }
   t.end()
