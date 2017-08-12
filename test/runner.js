@@ -27,11 +27,14 @@ tape('sync method', t => {
 })
 
 tape('sync error', t => {
-  t.plan(1)
+  t.plan(4)
   try {
     api.errorSync()
-  } catch (e) {
-    t.ok(e, 'Exception thrown: '+e.toString())
+} catch (err) {
+	  t.equal(err.code, 104)
+	  t.equal(err.name, 'Error')
+	  t.equal(err.message, 'oh no!')
+	  t.equal(err.isErrorFromIPC, true)
   }
 })
 
@@ -51,7 +54,10 @@ tape('async method', t => {
   api.addOne(null, done())
   api.addOne('asdf', done())
   done((err, a, b, c, d) => {
-    if (err) throw err
+    if (err)
+	{
+		throw err
+	}
     t.equal(a, 6, '5+1')
     t.equal(b, 1, '0+1')
     t.equal(c, 1, 'null+1')
@@ -77,7 +83,11 @@ tape('async array buffer method', t => {
 
 tape('async error', t => {
   api.error(err => {
-    t.ok(err, 'Error returned: '+err.toString())
+    t.ok(err, 'Error returned: '+ err.message)
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
     t.end()
   })
 })
@@ -127,10 +137,17 @@ tape('promise array buffer method', t => {
 tape('promise error', t => {
   api.errorPromise()
     .catch(err => {
-      console.log('Plain Error', err, err.toString())
-      t.equal(err.toString(), 'Error: oh no!')
+      console.log('Plain Error', err)
+
+	  console.log('Plain promise Error', err )
+console.log('Plain promise Error message', err.message)
+console.log('Plain promise Error stack', err.stack)
+
+
+      t.equal(err.code, 104)
       t.equal(err.name, 'Error')
       t.equal(err.message, 'oh no!')
+      t.equal(err.isErrorFromIPC, true)
       t.end()
     })
 })
@@ -139,9 +156,10 @@ tape('promise custom error', t => {
   api.customErrorPromise()
     .catch(err => {
       console.log('Custom Error', err, err.toString())
-      t.equal(err.toString(), 'CustomError: oh no!')
       t.equal(err.name, 'CustomError')
       t.equal(err.message, 'oh no!')
+	  t.equal(err.isErrorFromIPC, true)
+
       t.end()
     })
 })
@@ -208,16 +226,24 @@ tape('readable error', t => {
   var r = api.failingReadable()
   r.on('error', err => {
     console.log('readable error', err)
-    t.ok(err, 'Error emitted: '+err.toString())
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
+    // t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
 })
 
 tape('readable error (promise)', t => {
   var r = api.failingReadablePromise()
-  r.on('error', err => { 
+  r.on('error', err => {
+	  t.equal(err.code, 104)
+	  t.equal(err.name, 'Error')
+	  t.equal(err.message, 'oh no!')
+	  t.equal(err.isErrorFromIPC, true)
     console.log('readable promise error', err)
-    t.ok(err, 'Error emitted: '+err.toString())
+    // t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
 })
@@ -232,9 +258,13 @@ tape('readable exception', t => {
   try {
     api.exceptionReadable()
     throw 'should not reach this point'
-  } catch (e) {
-    console.log('readable exception', e)
-    t.ok(e, 'Exception thrown: '+e.toString())
+} catch (err) {
+    console.log('readable exception', err)
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
+    t.ok(err, 'Exception thrown: '+err.message)
   }
   t.end()
 })
@@ -269,8 +299,12 @@ tape('writable method 2 (object mode)', t => {
 
 tape('writable error', t => {
   var w = api.failingWritable()
-  w.on('error', err => { 
+  w.on('error', err => {
     t.ok(err, 'Error emitted: '+err.toString())
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
     t.end()
   })
   w.write(1)
@@ -291,9 +325,13 @@ tape('writable exception', t => {
   try {
     api.exceptionWritable()
     throw 'should not reach this point'
-  } catch (e) {
-    console.log('writable exception', e)
-    t.ok(e, 'Exception thrown: '+e.toString())
+} catch (err) {
+    console.log('writable exception', err)
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
+    t.ok(err, 'Exception thrown: '+err.message )
   }
   t.end()
 })

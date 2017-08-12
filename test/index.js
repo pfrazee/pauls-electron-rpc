@@ -29,14 +29,26 @@ function globalPermissionCheck (event, methodName, args) {
 rpc.exportAPI('test', manifest, {
   // sync methods
   addOneSync: n => n + 1,
-  errorSync: () => { throw new Error('oh no!') },
+  errorSync: //() => { throw new Error('oh no!') },
+  () =>
+  	{
+		let error = new Error('oh no!')
+		error.code = 104;
+		throw error
+	},
   disallowedMethodSync: () => true,
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
   getArrayBuffer: cb => cb(null, (new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
   sendArrayBuffer: (buf, cb) => {cb(null, buf)},
-  error: cb => cb(new Error('oh no!')),
+  error: cb =>
+  {
+	  let error = new Error('oh no!')
+	  error.code = 104;
+
+	  return cb( error )
+  },
   timeout: cb => setTimeout(cb, 5e3),
   disallowedMethod: cb => cb(true),
 
@@ -44,7 +56,12 @@ rpc.exportAPI('test', manifest, {
   addOnePromise: n => Promise.resolve(n + 1),
   getArrayBufferPromise: () => Promise.resolve((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
   sendArrayBufferPromise: buf => Promise.resolve(buf),
-  errorPromise: () => Promise.reject(new Error('oh no!')),
+  errorPromise: () =>
+  	{
+		let error = new Error('oh no!')
+		error.code = 104;
+		return Promise.reject( error )
+	},
   customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
   timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
 
@@ -106,7 +123,9 @@ rpc.exportAPI('test', manifest, {
   failingReadable: n => {
     var readable = new Readable({ objectMode: true, read() {} })
     setImmediate(() => {
-      readable.emit('error', new Error('Oh no!'))
+	  let error = new Error('oh no!')
+	  error.code = 104;
+      readable.emit('error', error )
       readable.push(null)
     })
     return readable
@@ -114,13 +133,17 @@ rpc.exportAPI('test', manifest, {
   failingReadablePromise: n => {
     return new Promise((resolve, reject) => {
       setImmediate(() => {
-        reject(new Error('Oh no!'))
+		let error = new Error('oh no!')
+		error.code = 104;
+        reject( error )
       })
     })
   },
   noReadable: n => undefined,
   exceptionReadable: n => {
-    throw new Error('Oh no!')
+	let error = new Error('oh no!')
+	error.code = 104;
+    throw error
   },
 
   // writable methods
@@ -156,12 +179,16 @@ rpc.exportAPI('test', manifest, {
       write (chunk, enc, next) {}
     })
     setImmediate(() => {
-      writable.emit('error', new Error('Oh no!'))
+		let error = new Error('oh no!')
+  	  error.code = 104;
+      writable.emit('error', error )
     })
     return writable
   },
   noWritable: n => undefined,
   exceptionWritable: n => {
-    throw new Error('Oh no!')
+	let error = new Error('oh no!')
+	error.code = 104;
+    throw error;
   }
 }, globalPermissionCheck)
