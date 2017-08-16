@@ -138,12 +138,6 @@ tape('promise error', t => {
   api.errorPromise()
     .catch(err => {
       console.log('Plain Error', err)
-
-	  console.log('Plain promise Error', err )
-console.log('Plain promise Error message', err.message)
-console.log('Plain promise Error stack', err.stack)
-
-
       t.equal(err.code, 104)
       t.equal(err.name, 'Error')
       t.equal(err.message, 'oh no!')
@@ -230,7 +224,7 @@ tape('readable error', t => {
 	t.equal(err.name, 'Error')
 	t.equal(err.message, 'oh no!')
 	t.equal(err.isErrorFromIPC, true)
-    // t.ok(err, 'Error emitted: '+err.toString())
+    t.ok(err, 'Error emitted: '+err.message)
     t.end()
   })
 })
@@ -238,12 +232,12 @@ tape('readable error', t => {
 tape('readable error (promise)', t => {
   var r = api.failingReadablePromise()
   r.on('error', err => {
-	  t.equal(err.code, 104)
-	  t.equal(err.name, 'Error')
-	  t.equal(err.message, 'oh no!')
-	  t.equal(err.isErrorFromIPC, true)
+	t.equal(err.code, 104)
+	t.equal(err.name, 'Error')
+	t.equal(err.message, 'oh no!')
+	t.equal(err.isErrorFromIPC, true)
     console.log('readable promise error', err)
-    // t.ok(err, 'Error emitted: '+err.toString())
+    t.ok(err, 'Error emitted: '+err.message)
     t.end()
   })
 })
