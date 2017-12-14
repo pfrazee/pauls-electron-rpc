@@ -1,6 +1,6 @@
 {
   "name": "pauls-electron-rpc",
-  "version": "4.0.1",
+  "version": "4.0.3",
   "description": "My RPC solution for exporting APIs from the electron background process to renderers and webviews.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/pfraze/pauls-electron-rpc#readme",
   "devDependencies": {
     "arraybuffer-equal": "^1.0.4",
-    "electron": "1.7.1",
+    "electron": "1.8.2-beta.2",
     "multicb": "^1.2.1",
     "tape": "^4.6.0",
     "tape-dom": "0.0.10",
