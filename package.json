@@ -28,5 +28,8 @@
     "tape": "^4.6.0",
     "tape-dom": "0.0.10",
     "zerr": "^1.0.4"
+  },
+  "dependencies": {
+    "duplexer": "^0.1.1"
   }
 }

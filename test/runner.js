@@ -215,7 +215,7 @@ tape('readable error', t => {
 
 tape('readable error (promise)', t => {
   var r = api.failingReadablePromise()
-  r.on('error', err => { 
+  r.on('error', err => {
     console.log('readable promise error', err)
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
@@ -269,7 +269,7 @@ tape('writable method 2 (object mode)', t => {
 
 tape('writable error', t => {
   var w = api.failingWritable()
-  w.on('error', err => { 
+  w.on('error', err => {
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
@@ -296,6 +296,28 @@ tape('writable exception', t => {
     t.ok(e, 'Exception thrown: '+e.toString())
   }
   t.end()
+})
+
+tape('duplex method (object mode)', t => {
+  var d = api.goodObjectmodeDuplex(5)
+  var counter = 5
+  d.on('data', n => {
+    t.equal(n, counter++)
+
+    if(n >= 8) {
+      d.write(1)
+      d.write(2)
+      d.write(3)
+      d.write(4)
+      d.write(5)
+      d.end()
+    }
+  })
+  d.on('error', err => { throw err })
+  ipcRenderer.once('writable-end', (event, data) => {
+    t.deepEqual(data, [6,7,8,9,10])
+    t.end()
+  })
 })
 
 // renderer-only tests

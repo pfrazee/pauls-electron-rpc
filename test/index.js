@@ -1,5 +1,6 @@
 const { Readable, Writable } = require('stream')
 const { app, BrowserWindow } = require('electron')
+const {duplex} = require('../lib/util')
 const zerr = require('zerr')
 const rpc = require('../')
 const manifest = require('./manifest')
@@ -150,6 +151,27 @@ rpc.exportAPI('test', manifest, {
       this.sender.send('writable-end', buffer)
     })
     return writable
+  },
+  goodObjectmodeDuplex: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(n + chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    readable.push(n)
+    readable.push(n+1)
+    readable.push(n+2)
+    readable.push(n+3)
+
+    return duplex(writable, readable)
   },
   failingWritable: n => {
     var writable = new Writable({

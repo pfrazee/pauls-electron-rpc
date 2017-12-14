@@ -36,5 +36,8 @@ module.exports = {
   goodObjectmodeWritable: 'writable',
   failingWritable: 'writable',
   noWritable: 'writable',
-  exceptionWritable: 'writable'
+  exceptionWritable: 'writable',
+
+  // duplex
+  goodObjectmodeDuplex: 'duplex',
 }
