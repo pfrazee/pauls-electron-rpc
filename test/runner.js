@@ -320,6 +320,126 @@ tape('duplex method (object mode)', t => {
   })
 })
 
+tape('duplex method write from import side only', t => {
+  var d = api.goodObjectmodeDuplexReadOnly(5)
+  d.on('data', n => {
+    t.notOk()
+  })
+
+  d.write(1)
+  d.write(2)
+  d.write(3)
+  d.write(4)
+  d.write(5)
+  d.end()
+  d.on('error', err => { throw err })
+  ipcRenderer.once('writable-end', (event, data) => {
+    t.deepEqual(data, [6,7,8,9,10])
+    t.end()
+  })
+})
+
+tape('duplex method write from export side only', t => {
+  var d = api.goodObjectmodeDuplexWriteOnly(5)
+  var counter = 5
+  d.on('data', n => {
+    t.equal(n, counter++)
+    if (n >= 8) {
+      d.end()
+    }
+  })
+
+  d.on('error', err => { throw err })
+  ipcRenderer.once('writable-end', (event, data) => {
+    t.deepEqual(data, [])
+    t.end()
+  })
+})
+tape('duplex readable close from client', t => {
+  var d = api.continuousDuplexReadable()
+  setTimeout(() => d.close(), 50)
+  d.on('data', data => console.log(data))
+  d.on('end', () => {
+    t.ok(true, 'Close() ends the streamp')
+    t.end()
+  })
+})
+
+tape('duplex close readable from server', t => {
+  var d = api.goodDuplexClosesReadable()
+  var i = setInterval(() => d.push('ping'), 5)
+
+  d.on('data', data => console.log(data))
+  d.on('end', () => {
+    clearInterval(i)
+    t.ok(true, 'Close() ends the streamp')
+    t.end()
+  })
+})
+
+tape('duplex close writable from server', t => {
+  var d = api.goodDuplexClosesWritable()
+  var i = setInterval(() => d.push('ping'), 5)
+
+  d.on('data', data => console.log(data))
+  d.on('finish', () => {
+    clearInterval(i)
+    t.ok(true, 'end() ends the streamp')
+    t.end()
+  })
+})
+
+// duplex error
+tape('duplex error (promise)', t => {
+  var r = api.failingDuplexPromise()
+  r.on('error', err => {
+    console.log('duplex promise error', err)
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
+})
+
+tape('duplex readable not returned', t => {
+  var r = api.noDuplex()
+  t.equal(typeof r, 'undefined')
+  t.end()
+})
+
+tape('duplex readable exception', t => {
+  try {
+    api.exceptionDuplex()
+    throw 'should not reach this point'
+  } catch (e) {
+    console.log('duplex readable exception', e)
+    t.ok(e, 'Exception thrown: '+e.toString())
+  }
+  t.end()
+})
+
+// duplex read-side error
+tape('duplex readable error', t => {
+  var r = api.failingDuplexReadable()
+  r.on('error', err => {
+    console.log('duplex readable error', err)
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
+})
+
+tape('duplex writable error', t => {
+  var d = api.failingDuplexWritable()
+  d.on('error', err => {
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
+  d.write(1)
+  d.write(2)
+  d.write(3)
+  d.write(4)
+  d.write(5)
+  d.end()
+})
+
 // renderer-only tests
 if (window.isRenderer) {
   tape('open readables close when the webview is destroyed', t => {
