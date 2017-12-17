@@ -36,5 +36,18 @@ module.exports = {
   goodObjectmodeWritable: 'writable',
   failingWritable: 'writable',
   noWritable: 'writable',
-  exceptionWritable: 'writable'
+  exceptionWritable: 'writable',
+
+  // duplex
+  goodObjectmodeDuplex: 'duplex',
+  goodObjectmodeDuplexReadOnly: 'duplex',
+  goodObjectmodeDuplexWriteOnly: 'duplex',
+  goodDuplexClosesReadable: 'duplex',
+  goodDuplexClosesWritable: 'duplex',
+  continuousDuplexReadable: 'duplex',
+  failingDuplexPromise: 'duplex',
+  noDuplex: 'duplex',
+  exceptionDuplex: 'duplex',
+  failingDuplexReadable: 'duplex',
+  failingDuplexWritable: 'duplex',
 }

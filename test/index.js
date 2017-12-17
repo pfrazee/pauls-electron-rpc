@@ -1,5 +1,6 @@
 const { Readable, Writable } = require('stream')
 const { app, BrowserWindow } = require('electron')
+const {duplex} = require('../lib/util')
 const zerr = require('zerr')
 const rpc = require('../')
 const manifest = require('./manifest')
@@ -151,6 +152,156 @@ rpc.exportAPI('test', manifest, {
     })
     return writable
   },
+  goodObjectmodeDuplex: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(n + chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    readable.push(n)
+    readable.push(n+1)
+    readable.push(n+2)
+    readable.push(n+3)
+    return duplex(writable, readable)
+  },
+  goodObjectmodeDuplexReadOnly: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(n + chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    return duplex(writable, readable)
+  },
+  goodObjectmodeDuplexWriteOnly: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(chunk)
+        next()
+      }
+    })
+    writable.on('finish', () => {
+      this.sender.send('writable-end', buffer)
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    readable.push(n)
+    readable.push(n+1)
+    readable.push(n+2)
+    readable.push(n+3)
+    return duplex(writable, readable)
+  },
+  goodDuplexClosesReadable: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(chunk)
+        next()
+      }
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    readable.push(null)
+    var d = duplex(writable, readable)
+    setTimeout(() => readable.push(null), 50)
+    return d
+  },
+  goodDuplexClosesWritable: function (n) {
+    var buffer = []
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        buffer.push(chunk)
+        next()
+      }
+    })
+
+    var readable = new Readable({ objectMode: true, read() {} })
+    var d = duplex(writable, readable)
+    setTimeout(() => writable.end(), 50)
+    return d
+  },
+
+  continuousDuplexReadable: (label) => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    var i = setInterval(() => readable.push('ping'), 5)
+
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        next()
+      }
+    })
+
+    var d = duplex(writable, readable)
+    d.close = () => {
+      clearInterval(i)
+      readable.push(null)
+
+      // inform the test runner
+      mainWindow.webContents.send(label+'-close')
+    }
+    return d
+  },
+  failingDuplexPromise: n => {
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        reject(new Error('Oh no!'))
+      })
+    })
+  },
+  noDuplex: n => undefined,
+  exceptionDuplex: n => {
+    throw new Error('Oh no!')
+  },
+
+  failingDuplexReadable: n => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    setImmediate(() => {
+      readable.emit('error', new Error('Oh no!'))
+      readable.push(null)
+    })
+
+    var writable = new Writable({
+      objectMode: true,
+      write (chunk, enc, next) {
+        next()
+      }
+    })
+    return duplex(writable, readable)
+  },
+
+  failingDuplexWritable: n => {
+    var readable = new Readable({ objectMode: true, read() {} })
+    var writable = new Writable({
+      write (chunk, enc, next) {}
+    })
+
+    var d = duplex(writable, readable)
+    setImmediate(() => {
+      writable.emit('error', new Error('Oh no!'))
+    })
+    return d
+  },
+
   failingWritable: n => {
     var writable = new Writable({
       write (chunk, enc, next) {}
