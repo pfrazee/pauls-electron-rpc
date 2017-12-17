@@ -9,13 +9,13 @@ Features:
    - Promises
    - Readable streams
    - Writable streams
+   - Duplex streams
  - Permissions by examining the sender of the call
  - Monitors renderer/webview lifetime to automatically release streams
  - Optional timeout for async methods
 
 Possible future additions:
 
- - Duplex streams
  - Return objects with their own exported APIs
 
 ## Example usage
@@ -28,7 +28,9 @@ module.exports = {
   readFile: 'async',
   readFileSync: 'sync',
   sayHello: 'promise',
-  createReadStream: 'readable'
+  createReadStream: 'readable',
+  createWriteStream: 'writable',
+  createDuplexStream: 'duplex'
 }
 ```
 
@@ -45,7 +47,9 @@ var api = rpc.exportAPI('example-api', manifest, {
   readFile: fs.readFile,
   readFileSync: fs.readFileSync,
   sayHello: () => return Promise.resolve('hello!'),
-  createReadStream: fs.createReadStream
+  createReadStream: fs.createReadStream,
+  createWriteStream: /* ... */,
+  createDuplexStream: /* ... */
 })
 
 // log any errors
