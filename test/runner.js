@@ -224,8 +224,11 @@ tape('readable error (promise)', t => {
 
 tape('readable not returned', t => {
   var r = api.noReadable()
-  t.equal(typeof r, 'undefined')
-  t.end()
+  t.equal(typeof r, 'object')
+  r.on('error', err => {
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
 })
 
 tape('readable exception', t => {
@@ -283,8 +286,11 @@ tape('writable error', t => {
 
 tape('writable not returned', t => {
   var w = api.noWritable()
-  t.equal(typeof w, 'undefined')
-  t.end()
+  t.equal(typeof w, 'object')
+  w.on('error', err => {
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
 })
 
 tape('writable exception', t => {
@@ -401,8 +407,11 @@ tape('duplex error (promise)', t => {
 
 tape('duplex readable not returned', t => {
   var r = api.noDuplex()
-  t.equal(typeof r, 'undefined')
-  t.end()
+  t.equal(typeof r, 'object')
+  r.on('error', err => {
+    t.ok(err, 'Error emitted: '+err.toString())
+    t.end()
+  })
 })
 
 tape('duplex readable exception', t => {
