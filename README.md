@@ -2,7 +2,7 @@
 
 Features:
 
- - Supports RPC calls from the renderer or webview to the background process
+ - Supports RPC calls to/from the renderer or webview to the background process
  - Supports methods which return:
    - Sync values
    - Async CBs
@@ -13,10 +13,6 @@ Features:
  - Permissions by examining the sender of the call
  - Monitors renderer/webview lifetime to automatically release streams
  - Optional timeout for async methods
-
-Possible future additions:
-
- - Return objects with their own exported APIs
 
 ## Example usage
 
@@ -89,10 +85,9 @@ If `globalPermissionCheck` is specified, and does not return true, the method ca
 
 ### rpc.importAPI(channelName, manifest [,options])
 
-The `options` may include a `timeout`, to specify how long async methods wait before erroring.
-Set to `false` to disable timeout.
-
-The `options` may also include an `errors` object which provides custom error constructors.
+ - `options.timeout` Number. Specify how long in ms that async methods wait before erroring. Set to `false` to disable timeout.
+ - `options.errors` Object. Provides custom error constructors.
+ - `options.wc` WebContents. The web-contents that is exporting the API. Required when importing into the main thread.
 
 ## Readable Streams
 

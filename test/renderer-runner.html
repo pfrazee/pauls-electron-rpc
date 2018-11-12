@@ -17,5 +17,20 @@
     <webview src="./webview-runner.html#main" nodeintegration></webview>
     <h1>Renderer:</h1>
   </body>
-  <script>window.isRenderer = true; require('./runner.js')</script>
+  <script>
+  // export the API
+  const rpc = require('../')
+  const manifest = require('./manifest')
+  const API = require('./api')
+  function globalPermissionCheck (event, methodName, args) {
+    if (methodName === 'disallowedMethodSync') return false
+    if (methodName === 'disallowedMethod') return false
+    return true
+  }
+  rpc.exportAPI('test-renderer', manifest, API(), globalPermissionCheck)
+
+  // run the tests
+  window.isRenderer = true;
+  require('./renderer-runner.js')
+  </script>
 </html>
