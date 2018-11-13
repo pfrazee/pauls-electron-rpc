@@ -24,6 +24,11 @@ module.exports = mainWindow => ({
   sendArrayBufferPromise: buf => Promise.resolve(buf),
   errorPromise: () => Promise.reject(new Error('oh no!')),
   customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
+  errorWithAttrPromise: () => {
+    var err = new Error('oh no!')
+    err.attr = 'foo'
+    return Promise.reject(err)
+  },
   timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
 
   // readable methods

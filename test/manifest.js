@@ -19,6 +19,7 @@ module.exports = {
   sendArrayBufferPromise: 'promise',
   errorPromise: 'promise',
   customErrorPromise: 'promise',
+  errorWithAttrPromise: 'promise',
   timeoutPromise: 'promise',
 
   // readable methods

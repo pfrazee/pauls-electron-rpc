@@ -130,6 +130,18 @@ module.exports = wc => {
       })
   })
 
+  tape('promise error with attr', t => {
+    api.errorWithAttrPromise()
+      .catch(err => {
+        console.log('Error with attr', err, err.toString())
+        t.equal(err.toString(), 'Error: oh no!')
+        t.equal(err.name, 'Error')
+        t.equal(err.message, 'oh no!')
+        t.equal(err.attr, 'foo')
+        t.end()
+      })
+  })
+
   tape('promise timeout', t => {
     api.timeoutPromise()
       .catch(err => {
