@@ -14,6 +14,7 @@ module.exports = {
 
   // promise methods
   addOnePromise: 'promise',
+  addOnePromiseButReturnNotPromise: 'promise',
   getArrayBufferPromise: 'promise',
   sendArrayBufferPromise: 'promise',
   errorPromise: 'promise',

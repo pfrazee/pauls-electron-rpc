@@ -111,6 +111,21 @@ tape('promise method', t => {
   }).catch(e => { throw e })
 })
 
+tape('promise method that returns a value', t => {
+  Promise.all([
+    api.addOnePromiseButReturnNotPromise(5),
+    api.addOnePromiseButReturnNotPromise(0),
+    api.addOnePromiseButReturnNotPromise(null),
+    api.addOnePromiseButReturnNotPromise('asdf')
+  ]).then(values => {
+    t.equal(values[0], 6, '5+1')
+    t.equal(values[1], 1, '0+1')
+    t.equal(values[2], 1, 'null+1')
+    t.equal(values[3], 'asdf1', 'asdf+1')
+    t.end()
+  }).catch(e => { throw e })
+})
+
 tape('promise array buffer method', t => {
   api.getArrayBufferPromise().then(buf => {
     t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
