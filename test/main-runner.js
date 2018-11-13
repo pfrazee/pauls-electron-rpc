@@ -1,7 +1,6 @@
 const tape = require('tape')
 const multicb = require('multicb')
 const zerr = require('zerr')
-const isABEqual = require('arraybuffer-equal')
 const { ipcMain } = require('electron')
 const rpc = require('../')
 const manifest = require('./manifest')
@@ -33,13 +32,13 @@ module.exports = wc => {
   tape('async array buffer method', t => {
     api.getArrayBuffer((err, buf) => {
       if (err) throw err
-      t.ok(buf instanceof ArrayBuffer)
-      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+      t.ok(Buffer.isBuffer(buf))
+      t.ok(Buffer.from([0,1,2,3,4,6,7,8,9]).equals(buf))
 
-      api.sendArrayBuffer((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer, (err, buf) => {
+      api.sendArrayBuffer(Buffer.from([0,1,2,3,4,6,7,8,9]), (err, buf) => {
         if (err) throw err
-        t.ok(buf instanceof ArrayBuffer)
-        t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+        t.ok(Buffer.isBuffer(buf))
+        t.ok(Buffer.from([0,1,2,3,4,6,7,8,9]).equals(buf))
         t.end()
       })
     })
@@ -98,12 +97,12 @@ module.exports = wc => {
 
   tape('promise array buffer method', t => {
     api.getArrayBufferPromise().then(buf => {
-      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
-      t.ok(buf instanceof ArrayBuffer)
+      t.ok(Buffer.from([0,1,2,3,4,6,7,8,9]).equals(buf))
+      t.ok(Buffer.isBuffer(buf))
 
-      api.sendArrayBufferPromise(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer).then(buf => {
-        t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
-        t.ok(buf instanceof ArrayBuffer)
+      api.sendArrayBufferPromise(Buffer.from([0,1,2,3,4,6,7,8,9])).then(buf => {
+        t.ok(Buffer.from([0,1,2,3,4,6,7,8,9]).equals(buf))
+        t.ok(Buffer.isBuffer(buf))
         t.end()
       })
     })
