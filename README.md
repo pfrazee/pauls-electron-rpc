@@ -2,7 +2,7 @@
 
 Features:
 
- - Supports RPC calls to/from the renderer or webview to the background process
+ - Supports RPC calls to/from the renderer or webview or a node child-process to the background process
  - Supports methods which return:
    - Sync values
    - Async CBs
@@ -87,7 +87,8 @@ If `globalPermissionCheck` is specified, and does not return true, the method ca
 
  - `options.timeout` Number. Specify how long in ms that async methods wait before erroring. Set to `false` to disable timeout.
  - `options.errors` Object. Provides custom error constructors.
- - `options.wc` WebContents. The web-contents that is exporting the API. Required when importing into the main thread.
+ - `options.wc` WebContents. The web-contents that is exporting the API. Use this when importing an API from a webContents into the main thread.
+ - `options.proc` ChildProcess. The child-process that is exporting the API. Use this when importing an API from a node child process into the main thread.
 
 ## Readable Streams
 
