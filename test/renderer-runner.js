@@ -181,6 +181,20 @@ tape('promise timeout', t => {
     })
 })
 
+tape('promise stream', t => {
+  api.streamPromise()
+    .then(obj => {
+      var str = ""
+      obj.body.on('data', n => str += Buffer.from(n).toString('utf8'))
+      obj.body.on('error', err => { throw err })
+      obj.body.on('end', () => {
+        t.equal(str, "Line one\nLine two\n")
+        t.equal(obj.headers['X-Test'], true)
+        t.end()
+      })
+    }).catch(e => { throw e })
+})
+
 tape('readable method 1', t => {
   var counter = 5
   var r = api.goodReadable(counter)
