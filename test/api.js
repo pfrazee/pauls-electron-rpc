@@ -30,6 +30,14 @@ module.exports = mainWindow => ({
     return Promise.reject(err)
   },
   timeoutPromise: () => new Promise((resolve, reject) => setTimeout(resolve, 5e3)),
+  streamPromise: () => {
+    var readable = new Readable({read () {}})
+    readable.push("Line one\n")
+    readable.push("Line two\n")
+    readable.push(null)
+    console.log(readable)
+    return Promise.resolve({headers: {"X-Test": true}, body: readable})
+  },
 
   // readable methods
   goodReadable: n => {

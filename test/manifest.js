@@ -21,6 +21,7 @@ module.exports = {
   customErrorPromise: 'promise',
   errorWithAttrPromise: 'promise',
   timeoutPromise: 'promise',
+  streamPromise: 'promise',
 
   // readable methods
   goodReadable: 'readable',
