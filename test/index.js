@@ -10,7 +10,7 @@ process.on('uncaughtException', console.log)
 
 var mainWindow
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, webPreferences: {nodeIntegration: true, webviewTag: true}})
   rpc.exportAPI('test', manifest, API(mainWindow), globalPermissionCheck)
   mainWindow.loadURL(`file://${__dirname}/renderer-runner.html`)
   mainWindow.webContents.on('did-finish-load', () => {

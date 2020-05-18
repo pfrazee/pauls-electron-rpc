@@ -111,7 +111,6 @@ module.exports = wc => {
   tape('promise error', t => {
     api.errorPromise()
       .catch(err => {
-        console.log('Plain Error', err, err.toString())
         t.equal(err.toString(), 'Error: oh no!')
         t.equal(err.name, 'Error')
         t.equal(err.message, 'oh no!')
@@ -122,7 +121,6 @@ module.exports = wc => {
   tape('promise custom error', t => {
     api.customErrorPromise()
       .catch(err => {
-        console.log('Custom Error', err, err.toString())
         t.equal(err.toString(), 'CustomError: oh no!')
         t.equal(err.name, 'CustomError')
         t.equal(err.message, 'oh no!')
@@ -133,7 +131,6 @@ module.exports = wc => {
   tape('promise error with attr', t => {
     api.errorWithAttrPromise()
       .catch(err => {
-        console.log('Error with attr', err, err.toString())
         t.equal(err.toString(), 'Error: oh no!')
         t.equal(err.name, 'Error')
         t.equal(err.message, 'oh no!')
@@ -203,7 +200,6 @@ module.exports = wc => {
   tape('readable error', t => {
     var r = api.failingReadable()
     r.on('error', err => {
-      console.log('readable error', err)
       t.ok(err, 'Error emitted: '+err.toString())
       t.end()
     })
@@ -212,7 +208,6 @@ module.exports = wc => {
   tape('readable error (promise)', t => {
     var r = api.failingReadablePromise()
     r.on('error', err => {
-      console.log('readable promise error', err)
       t.ok(err, 'Error emitted: '+err.toString())
       t.end()
     })
@@ -232,7 +227,6 @@ module.exports = wc => {
       api.exceptionReadable()
       throw 'should not reach this point'
     } catch (e) {
-      console.log('readable exception', e)
       t.ok(e, 'Exception thrown: '+e.toString())
     }
     t.end()
@@ -244,11 +238,11 @@ module.exports = wc => {
       t.deepEqual(data, ['51','52','53','54','55'])
       t.end()
     })
-    w.write(1)
-    w.write(2)
-    w.write(3)
-    w.write(4)
-    w.write(5)
+    w.write('1')
+    w.write('2')
+    w.write('3')
+    w.write('4')
+    w.write('5')
     w.end()
   })
 
@@ -294,7 +288,6 @@ module.exports = wc => {
       api.exceptionWritable()
       throw 'should not reach this point'
     } catch (e) {
-      console.log('writable exception', e)
       t.ok(e, 'Exception thrown: '+e.toString())
     }
     t.end()
@@ -395,7 +388,6 @@ module.exports = wc => {
   tape('duplex error (promise)', t => {
     var r = api.failingDuplexPromise()
     r.on('error', err => {
-      console.log('duplex promise error', err)
       t.ok(err, 'Error emitted: '+err.toString())
       t.end()
     })
@@ -415,7 +407,6 @@ module.exports = wc => {
       api.exceptionDuplex()
       throw 'should not reach this point'
     } catch (e) {
-      console.log('duplex readable exception', e)
       t.ok(e, 'Exception thrown: '+e.toString())
     }
     t.end()
@@ -425,7 +416,6 @@ module.exports = wc => {
   tape('duplex readable error', t => {
     var r = api.failingDuplexReadable()
     r.on('error', err => {
-      console.log('duplex readable error', err)
       t.ok(err, 'Error emitted: '+err.toString())
       t.end()
     })
@@ -437,11 +427,11 @@ module.exports = wc => {
       t.ok(err, 'Error emitted: '+err.toString())
       t.end()
     })
-    d.write(1)
-    d.write(2)
-    d.write(3)
-    d.write(4)
-    d.write(5)
+    d.write('1')
+    d.write('2')
+    d.write('3')
+    d.write('4')
+    d.write('5')
     d.end()
   })
 }
