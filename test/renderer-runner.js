@@ -63,13 +63,13 @@ tape('async method', t => {
 tape('async array buffer method', t => {
   api.getArrayBuffer((err, buf) => {
     if (err) throw err
-    t.ok(buf instanceof ArrayBuffer)
-    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+    t.ok(buf instanceof Uint8Array)
+    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]), buf))
 
-    api.sendArrayBuffer((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer, (err, buf) => {
+    api.sendArrayBuffer((new Uint8Array([0,1,2,3,4,6,7,8,9])), (err, buf) => {
       if (err) throw err
-      t.ok(buf instanceof ArrayBuffer)
-      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
+      t.ok(buf instanceof Uint8Array)
+      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]), buf))
       t.end()
     })
   })
@@ -128,12 +128,12 @@ tape('promise method that returns a value', t => {
 
 tape('promise array buffer method', t => {
   api.getArrayBufferPromise().then(buf => {
-    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
-    t.ok(buf instanceof ArrayBuffer)
+    t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]), buf))
+    t.ok(buf instanceof Uint8Array)
 
-    api.sendArrayBufferPromise(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer).then(buf => {
-      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]).buffer, buf))
-      t.ok(buf instanceof ArrayBuffer)
+    api.sendArrayBufferPromise(new Uint8Array([0,1,2,3,4,6,7,8,9])).then(buf => {
+      t.ok(isABEqual(new Uint8Array([0,1,2,3,4,6,7,8,9]), buf))
+      t.ok(buf instanceof Uint8Array)
       t.end()
     })
   })
@@ -303,11 +303,11 @@ tape('writable error', t => {
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
-  w.write(1)
-  w.write(2)
-  w.write(3)
-  w.write(4)
-  w.write(5)
+  w.write('1')
+  w.write('2')
+  w.write('3')
+  w.write('4')
+  w.write('5')
   w.end()
 })
 
@@ -468,52 +468,52 @@ tape('duplex writable error', t => {
     t.ok(err, 'Error emitted: '+err.toString())
     t.end()
   })
-  d.write(1)
-  d.write(2)
-  d.write(3)
-  d.write(4)
-  d.write(5)
+  d.write('1')
+  d.write('2')
+  d.write('3')
+  d.write('4')
+  d.write('5')
   d.end()
 })
 
 // renderer-only tests
-if (window.isRenderer) {
-  tape('open readables close when the webview is destroyed', t => {
-    var wv = document.createElement('webview')
-    wv.id = 'readable-webview'
-    wv.setAttribute('nodeintegration', true)
-    wv.src = "./webview-runner.html#readable"
-    document.body.appendChild(wv)
+// if (window.isRenderer) {
+//   tape('open readables close when the webview is destroyed', t => {
+//     var wv = document.createElement('webview')
+//     wv.id = 'readable-webview'
+//     wv.setAttribute('nodeintegration', true)
+//     wv.src = "./webview-runner.html#readable"
+//     document.body.appendChild(wv)
 
-    wv.addEventListener('dom-ready', () => {
-      console.log('readable webview loaded')
+//     wv.addEventListener('dom-ready', () => {
+//       console.log('readable webview loaded')
 
-      ipcRenderer.once('destroytest-close', () => {
-        t.ok(true, 'Stream was closed when webview was destroyed')
-        t.end()
-      })
+//       ipcRenderer.once('destroytest-close', () => {
+//         t.ok(true, 'Stream was closed when webview was destroyed')
+//         t.end()
+//       })
 
-      document.body.removeChild(wv)
-    })
-  })
+//       document.body.removeChild(wv)
+//     })
+//   })
 
-  tape('open readables close when the webview is navigated', t => {
-    var wv = document.createElement('webview')
-    wv.id = 'readable-webview2'
-    wv.setAttribute('nodeintegration', true)
-    wv.src = "./webview-runner.html#readable"
-    document.body.appendChild(wv)
+//   tape('open readables close when the webview is navigated', t => {
+//     var wv = document.createElement('webview')
+//     wv.id = 'readable-webview2'
+//     wv.setAttribute('nodeintegration', true)
+//     wv.src = "./webview-runner.html#readable"
+//     document.body.appendChild(wv)
 
-    wv.addEventListener('dom-ready', () => {
-      console.log('readable webview 2 loaded')
+//     wv.addEventListener('dom-ready', () => {
+//       console.log('readable webview 2 loaded')
 
-      ipcRenderer.once('destroytest-close', () => {
-        document.body.removeChild(wv)
-        t.ok(true, 'Stream was closed when webview navigated')
-        t.end()
-      })
+//       ipcRenderer.once('destroytest-close', () => {
+//         document.body.removeChild(wv)
+//         t.ok(true, 'Stream was closed when webview navigated')
+//         t.end()
+//       })
 
-      wv.loadURL('about:blank')
-    })
-  })
-}
+//       wv.loadURL('about:blank')
+//     })
+//   })
+// }

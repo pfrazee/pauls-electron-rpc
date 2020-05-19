@@ -11,7 +11,7 @@ module.exports = mainWindow => ({
 
   // async methods
   addOne: (n, cb) => cb(null, n + 1),
-  getArrayBuffer: cb => cb(null, (new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
+  getArrayBuffer: cb => cb(null, (new Uint8Array([0,1,2,3,4,6,7,8,9]))),
   sendArrayBuffer: (buf, cb) => {cb(null, buf)},
   error: cb => cb(new Error('oh no!')),
   timeout: cb => setTimeout(cb, 5e3),
@@ -20,7 +20,7 @@ module.exports = mainWindow => ({
   // promise methods
   addOnePromise: n => Promise.resolve(n + 1),
   addOnePromiseButReturnNotPromise: n => n + 1,
-  getArrayBufferPromise: () => Promise.resolve((new Uint8Array([0,1,2,3,4,6,7,8,9])).buffer),
+  getArrayBufferPromise: () => Promise.resolve((new Uint8Array([0,1,2,3,4,6,7,8,9]))),
   sendArrayBufferPromise: buf => Promise.resolve(buf),
   errorPromise: () => Promise.reject(new Error('oh no!')),
   customErrorPromise: () => Promise.reject(new CustomError('oh no!')),
