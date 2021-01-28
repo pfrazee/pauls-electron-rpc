@@ -23,7 +23,7 @@
   "homepage": "https://github.com/pfraze/pauls-electron-rpc#readme",
   "devDependencies": {
     "arraybuffer-equal": "^1.0.4",
-    "electron": "9.0.0-beta.24",
+    "electron": "9.4.0",
     "multicb": "^1.2.1",
     "tape": "^4.6.0",
     "tape-dom": "0.0.10",
